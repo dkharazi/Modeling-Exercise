@@ -94,7 +94,7 @@ plot_grid(plot1, plot2, plot3, plot4, plot5, plot6, ncol = 2)
 ```
 
 <p align="center">
-  <img width="300" height="900" src="/graphics/plot1.png">
+  <img width="400" height="800" src="/graphics/plot1.png">
 </p>
 
 ## Predict using a Classification Tree Model
