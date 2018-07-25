@@ -11,13 +11,11 @@ Datasets: [Training Data](https://d396qusza40orc.cloudfront.net/predmachlearn/pm
 ## Variable Descriptions
 
 - `Classe:` A specific execution of an exercise.
-  -  `:` .
-
-(Class A) - exactly according to the specification
-(Class B) - throwing the elbows to the front
-(Class C) - lifting the dumbbell only halfway
-(Class D) - lowering the dumbbell only halfway
-(Class E) - throwing the hips to the front
+  - `Class A:` Exactly according to the specification.
+  - `Class B:` Throwing the elbows to the front.
+  - `Class C:` Lifting the dumbbell only halfway.
+  - `Class D:` Lowering the dumbbell only halfway.
+  - `Class E:` Throwing the hips to the front.
 
 ## Setup
 
