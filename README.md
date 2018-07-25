@@ -4,17 +4,20 @@ Using devices such as Jawbone Up, Nike FuelBand, and Fitbit it is now possible t
 
 In this analysis, the goal will be to use data from accelerometers on the belt, forearm, arm, and dumbell of 6 participants. They were asked to perform barbell lifts correctly and incorrectly in 5 different ways. More information is available from the website here: http://groupware.les.inf.puc-rio.br/har (see the section on the Weight Lifting Exercise Dataset).
 
+The "classe" variable, which is our response variable, refers to a specific execution of an exercise. Class A corresponds to the specified execution of the exercise, while the other 4 classes correspond to common mistakes. The exercises were performed by six male participants aged between 20-28 years, with little weight lifting experience. We made sure that all participants could easily simulate the mistakes in a safe and controlled manner by using a relatively light dumbbell (1.25kg).
+
 Datasets: [Training Data](https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv) [12 MB]; [Testing Data](https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv) [15 KB]
 
 ## Variable Descriptions
 
-Each record in the dataset contains:
+- `Classe:` A specific execution of an exercise.
+-  `:` .
 
-Triaxial acceleration from the accelerometer (total acceleration) and the estimated body acceleration.
-Triaxial Angular velocity from the gyroscope.
-A 561-feature vector with time and frequency domain variables.
-Its activity label.
-An identifier of the subject who carried out the experiment.
+(Class A) - exactly according to the specification
+(Class B) - throwing the elbows to the front
+(Class C) - lifting the dumbbell only halfway
+(Class D) - lowering the dumbbell only halfway
+(Class E) - throwing the hips to the front
 
 ## Setup
 
