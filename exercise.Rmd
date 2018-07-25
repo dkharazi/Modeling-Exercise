@@ -1,0 +1,142 @@
+---
+title: "Exercise"
+author: "Darius Kharazi"
+date: "7/24/2018"
+output: html_document
+---
+
+## Import Statements
+
+In our analysis about exercise, we will need to read in the data and any required libraries. We should also set a seed to provide a reproducible analysis. Next, we will clean the data.
+
+```{r setup, message=FALSE}
+## Import libraries
+library(knitr)
+library(readr)
+library(caret)
+library(rpart)
+library(randomForest)
+library(ggplot2)
+library(cowplot)
+
+## Import data
+train.df <- read_csv("~/Desktop/pml-training.csv", na = c("", "NA", "#DIV/0!"))
+test.df <- read_csv("~/Desktop/pml-testing.csv", na = c("", "NA", "#DIV/0!"))
+
+## Set seed
+set.seed(639)
+```
+
+## Cleaning the Data
+
+First, we want to clean any variables that contain a large percentage of NA values. In this case, we'll remove columns if 60% of the data are NA values. We will also remove the first column from both the training and testing datasets, since they only contain indices. Lastly, we will split the training dataset into training and validation datasets for cross validation.
+
+```{r clean}
+## Reformat classe variable as factor variable
+train.df$classe <- as.factor(train.df$classe)
+
+## Reformat predictor variables to factor for Random Forest Classifcation
+train.df$user_name <- as.factor(train.df$user_name)
+train.df$cvtd_timestamp <- as.factor(train.df$cvtd_timestamp)
+train.df$new_window <- as.factor(train.df$new_window)
+
+test.df$user_name <- as.factor(test.df$user_name)
+test.df$cvtd_timestamp <- as.factor(test.df$cvtd_timestamp)
+test.df$new_window <- as.factor(test.df$new_window)
+
+## Remove rows with only NA values
+na.cols <- colSums(is.na(train.df)) < (nrow(train.df) * 0.6) # remove columns that are 60% NA
+train.df <- train.df[,na.cols]
+test.df <- test.df[,na.cols] # remove same cols from test that were removed form train
+
+## Remove columns of indices and useless timestamps
+train.df <- train.df[,-c(1,5)]
+test.df <- test.df[,-c(1,5,60)]
+
+## Ensure same amount of levels for factor variables
+levels(test.df$new_window) <- levels(train.df$new_window)
+
+## Ensure data frame format
+train.df <- data.frame(train.df)
+test.df <- data.frame(test.df)
+
+## Split the training dataset
+inTrain <- createDataPartition(train.df$classe, p = 0.7, list = FALSE)
+trainCV <- train.df[inTrain,]
+validateCV <- train.df[-inTrain,]
+```
+
+## Exploratory Analysis
+
+We can see that the total accelaration of arms, belts, forearms, and dumbbells have a lot of overlap between each other, and we can see that the positionings (x, y, and z) of arms, belts, forearms, and dumbbells have a lot of overlap, as well. There seems to be an extremely large amount of variables, which makes relationship-building process of the "classe" variable time-consuming and difficult. For prediction purposes, we could quickly run a machine learning algorithm at this stage in our analysis, and return to examining each predictor later.
+
+```{r eda}
+## Plot arm accelaration
+plot1 <- qplot(accel_arm_x, accel_arm_y, col = classe, data = trainCV)
+
+## Plot belt accelaration
+plot2 <- qplot(accel_belt_x, accel_belt_y, col = classe, data = trainCV)
+
+## Plot dumbbell accelaration
+plot3 <- qplot(accel_forearm_x, accel_forearm_y, col = classe, data = trainCV)
+
+## Plot dumbbell accelaration
+plot4 <- qplot(accel_dumbbell_x, accel_dumbbell_y, col = classe, data = trainCV)
+
+## Plot total accelaration
+plot5 <- qplot(total_accel_dumbbell, total_accel_arm, col = classe, data = trainCV)
+
+## Plot total accelaration
+plot6 <- qplot(total_accel_belt, total_accel_forearm, col = classe, data = trainCV)
+
+## Arrange plots
+plot_grid(plot1, plot2, plot3, plot4, plot5, plot6, ncol = 2)
+```
+
+## Predict using a Classification Tree Model
+
+First, we will use a classification tree to predict the the classe variable in our dataset. After applying a classification tree model to our data, we are able to see the goodness of fit of our model according to the confusion matrix. The majority of our "classe" observations were correctly predicted, but we may be able to do better.
+
+```{r classtree}
+## Use model to predict classe of testing dataset
+t.model <- rpart(classe ~ ., data = trainCV, method = "class")
+pred <- predict(t.model, validateCV, type = "class")
+
+## Produce a confusion matrix
+confusionMatrix(pred, validateCV$classe)
+```
+
+## Predict using a Random Forest Classifier
+
+```{r rf}
+## Use model to predict classe of testing dataset
+rf.data <- rfImpute(classe ~ ., data = trainCV)
+rf.model <- randomForest(classe ~ ., data = rf.data)
+pred <- predict(rf.model, validateCV, type = "class")
+
+## Produce a confusion matrix
+confusionMatrix(pred, validateCV$classe)
+
+## Plot data that were incorrectly predicted
+validateCV$isGoodPred <- validateCV$classe == pred
+qplot(accel_arm_x, accel_arm_y, col = isGoodPred, data = validateCV)
+
+## Predict "classe" from the testing dataset
+predict(rf.model, test.df)
+```
+
+## Conclusion
+
+In our analysis, we performed some exploratory analysis to determine the relationships of a few predictors with the response variable. Since there were so many predictors in our dataset, we wanted to predict upon our response using a few machine learning algorithms in order to quickly capture a more comprehensive understanding of the relationship between our predictors and the response initially. In this particular scenario, we wanted to compare the classification tree algorithm to the random forest classifier when predicting upon the "classe" variable in this dataset and, in the end, test their accuracies. Ultimately, we were able to accomplish our goal, and we are able to observe similar accuracies to the ones listed below.
+
+|       Method        | Accuracy |
+| ------------------- | -------- |
+| Classification Tree |  0.8477  |
+| Random Forest       |  0.9987  |
+
+In the end, the random forest classifier had the highest accuracy of the two models, since the random forest has an accuracy of 99%, and the classification tree has an accuracy of 85%. Therefore, we chose to use the random forest classifier as our final predictive model. The final predictions of the "classe" variables given the test data are provided in the table below.
+
+|      Test Set       | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 |
+| ------------------- | - | - | - | - | - | - | - | - | - | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- |
+|      Prediction     | B | A | B | A | A | E | D | B | A | A  | B  | C  | B  | A  | E  | E  | A  | B  | B  | B  |
+
