@@ -20,8 +20,9 @@ An identifier of the subject who carried out the experiment.
 
 1. Download the zip file from here.
 2. Unzip the file.
-3. Move the data to the same directory as the R script
-4. Run the R script
+3. Move the data to the same directory as the R script.
+4. Adjust the R script accordingly to the directory of the data.
+5. Run the R script
 
 ## References
 
