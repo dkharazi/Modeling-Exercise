@@ -93,6 +93,10 @@ plot6 <- qplot(total_accel_belt, total_accel_forearm, col = classe, data = train
 plot_grid(plot1, plot2, plot3, plot4, plot5, plot6, ncol = 2)
 ```
 
+<p align="center">
+  <img width="800" height="1200" src="/graphics/plot1.png">
+</p>
+
 ## Predict using a Classification Tree Model
 
 First, we will use a classification tree to predict the the classe variable in our dataset. After applying a classification tree model to our data, we are able to see the goodness of fit of our model according to the confusion matrix. The majority of our "classe" observations were correctly predicted, but we may be able to do better.
@@ -124,6 +128,10 @@ qplot(accel_arm_x, accel_arm_y, col = isGoodPred, data = validateCV)
 ## Predict "classe" from the testing dataset
 predict(rf.model, test.df)
 ```
+
+<p align="center">
+  <img width="400" height="400" src="/graphics/plot2.png">
+</p>
 
 ## Conclusion
 
