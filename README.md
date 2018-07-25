@@ -11,7 +11,7 @@ Datasets: [Training Data](https://d396qusza40orc.cloudfront.net/predmachlearn/pm
 ## Variable Descriptions
 
 - `Classe:` A specific execution of an exercise.
--  `:` .
+  -  `:` .
 
 (Class A) - exactly according to the specification
 (Class B) - throwing the elbows to the front
