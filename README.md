@@ -5,7 +5,7 @@ Using devices such as Jawbone Up, Nike FuelBand, and Fitbit it is now possible t
 In this analysis, the goal will be to use data from accelerometers on the belt, forearm, arm, and dumbell of 6 participants. They were asked to perform barbell lifts correctly and incorrectly in 5 different ways. More information is available from the website here: http://groupware.les.inf.puc-rio.br/har (see the section on the Weight Lifting Exercise Dataset).
 
 Datasets: [Training Data](https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv) [12 MB]  
-[Testing Data](https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv) [15 KB]
+          [Testing Data](https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv) [15 KB]
 
 ## Variable Descriptions
 
